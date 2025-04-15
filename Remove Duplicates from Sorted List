@@ -1,0 +1,79 @@
+class ListNode {
+    int val;
+    ListNode next;
+    
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+
+    // Method to deserialize a string like "[1,1,2]" into a linked list
+    public static ListNode deserialize(String s) {
+        // Check if the input string is empty or just contains brackets
+        if (s == null || s.trim().isEmpty() || s.equals("[]")) {
+            return null;
+        }
+
+        // Remove the brackets
+        s = s.replaceAll("[\\[\\] ]", "");
+
+        // Split the string by commas
+        String[] values = s.split(",");
+        
+        // Create the head node
+        ListNode head = new ListNode(Integer.parseInt(values[0]));
+        ListNode current = head;
+        
+        // Create the rest of the nodes
+        for (int i = 1; i < values.length; i++) {
+            current.next = new ListNode(Integer.parseInt(values[i]));
+            current = current.next;
+        }
+        
+        return head;
+    }
+
+    // Method to print the list for testing
+    public void printList() {
+        ListNode current = this;
+        while (current != null) {
+            System.out.print(current.val + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+}
+
+public class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode current = head;
+
+        while (current != null && current.next != null) {
+            if (current.val == current.next.val) {
+                current.next = current.next.next;  // Skip the duplicate node
+            } else {
+                current = current.next;  // Move to the next node
+            }
+        }
+        
+        return head;
+    }
+
+    public static void main(String[] args) {
+        // Test case: Initialize the input string
+        String input = "[1,1,2]";
+        
+        // Deserialize the input string into a linked list
+        ListNode head = ListNode.deserialize(input);
+        
+        // Call the method to delete duplicates
+        Solution solution = new Solution();
+        head = solution.deleteDuplicates(head);
+        
+        // Print the updated linked list
+        if (head != null) {
+            head.printList();  // Expected Output: 1 2
+        } else {
+            System.out.println("The list is empty.");
+        }
+    }
+}
